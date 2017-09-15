@@ -1,6 +1,8 @@
 package com.brightsconsulting.posix4j;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -56,4 +58,21 @@ public class POSIX {
 	public static int ssh(String sshkey, String user, String addr, String s) throws IOException, InterruptedException {
 		return POSIX.eval("ssh -i " + sshkey + " -oStrictHostKeyChecking=no " + user + "@" + addr + " " + s);
 	}
+
+	public static int scp(String sshkey, String from, String user, String addr, String to)
+			throws IOException, InterruptedException {
+		return POSIX.eval("scp -i " + sshkey + " " + from + " " + user + "@$" + addr + ":" + to);
+	}
+
+	public static String cat(File file) throws IOException {
+		String ret = "";
+		BufferedReader br = new BufferedReader(new FileReader(file));
+		String str;
+		while ((str = br.readLine()) != null) {
+			ret += str + "\r\n";
+		}
+		br.close();
+		return ret;
+	}
+
 }
